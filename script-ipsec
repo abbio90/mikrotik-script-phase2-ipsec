@@ -1,0 +1,52 @@
+/system script
+add comment=established dont-require-permissions=yes name=state-peer-ipsec \
+owner=installer policy=\
+ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon source="#-\
+---------SCRIPT WRITE STATE LOG PEER IPSEC----------\r\
+\n#\r\
+\n# Script: WRITE STATE LOG CONNECTION PEER IPSEC\r\
+\n# Version: 1.0\r\
+\n# RouterOS v7.9\r\
+\n# Created: 18/05/2023\r\
+\n# Updated: no updated\r\
+\n# Author: Fabio Fois\r\
+\n# Website: https://foisfabio.it\r\
+\n# Email: consulenza@foisfabio.it\r\
+\n#\r\
+\n#----------NO MODIFY THIS SECTION----------\r\
+\n\r\
+\n{\r\
+\n:local scriptName \"state-peer-ipsec\"\r\
+\n:local LastStatusEdok [/system script get [find name=\"\$scriptName\"] co\
+mment]\r\
+\n:local CurrentStatusEdok [/ip ipsec policy get [find comment=\"Peer-Edok\
+\"] value-name=ph2-state]\r\
+\n:put \$LastStatusEdok\r\
+\n:put \$CurrentStatusEdok\r\
+\n:local keepOutput false\r\
+\n:local output\r\
+\n:if ([:len \$LastStatusEdok] = 0) do={\r\
+\n:set keepOutput true\r\
+\n}\r\
+\n:if (\$CurrentStatusEdok != \$LastStatusEdok) do={\r\
+\n:set keepOutput true\r\
+\n:set output [/system script set [find name=\"\$scriptName\"] comment=\$C\
+urrentStatusEdok\r\
+\n/log warning \"STATO PEER EDOK=\$CurrentStatusEdok\"]\r\
+\n:if (\$CurrentStatusEdok = \$LastStatusEdok) do={\r\
+\n:set keepOutput false\r\
+\n:set output \"\"\r\
+\n}\r\
+\n:put \$keepOutput\r\
+\n:if (\$keepOutput = true) do={\r\
+\n\$output\r\
+\n}\r\
+\n\r\
+\n}\r\
+\n}"
+
+/system scheduler
+add interval=20s name=schedule_state-peer-ipsec on-event=\
+"/system script run state-peer-ipsec" policy=\
+ftp,reboot,read,write,policy,test,password,sniff,sensitive,romon \
+start-date=may/18/2023 start-time=19:31:44
