@@ -33,3 +33,5 @@ Andiamo nel terminale e aggiungiamo il commento al peer ipsec rappresentato dal 
 
 
 In questa maniera abbiamo inserito il commento, per verificarne l'effettiva modifica possiamo digitare nel terminale il comando: /ip ipsec peer export show sensitive.
+
+GUIDA COMPLETA SUL SITO https://foisfabio.it
